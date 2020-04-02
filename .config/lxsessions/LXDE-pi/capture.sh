@@ -1,7 +1,12 @@
 #!/bin/bash
-FILENAME="myvid.h264_"
-for INDEX in {1..5}
+# might need to trn lxsession to generate .config/lsxsession/LXDE-pi/ folder
+FILENAME="/home/pi/video_"
+for INDEX in {1..1000}
 do 
-	[ -f /home/pi/$FILENAME$INDEX ] && echo "file exists "$FILENAME$INDEX || raspivid -f -t 0 -o $FILENAME$INDEX -w 1920 -h 1080
+	file="$FILENAME$INDEX.h264"
+	echo "debug $file"
+	[ -f $file ] || raspivid -f -t 0 -o "$file" -w 1920 -h 1080
+
+	# catch Ctrl+c interrupt
+	trap "echo Exited!; exit;" SIGINT SIGTERM
 done
-# raspivid -f -t 0 -o /home/pi/myvid.h264 -w 1920 -h 1080
